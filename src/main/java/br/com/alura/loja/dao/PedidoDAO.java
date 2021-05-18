@@ -24,4 +24,14 @@ public class PedidoDAO {
 		String jpql = "SELECT SUM(p.valorTotal) FROM Pedido p";
 		return entityManager.createQuery(jpql, BigDecimal.class).getSingleResult();
 	}
+	
+	public List<Object[]> relatorioDeVendas(){
+		String jpql = "SELECT produto.nome SUM(item.quantidade), MAX(pedido.data) "
+				+ "FROM Pedido pedido "
+				+ "JOIN pedido.itens item "
+				+ "JOIN item.produto produto "
+				+ "GROUP BY produto.nome"
+				+ "ORDER BY item.quantidade.desc";
+		return entityManager.createQuery(jpql, Object[].class).getResultList();
+	}
 }
